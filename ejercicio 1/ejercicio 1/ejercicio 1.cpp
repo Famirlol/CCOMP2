@@ -13,13 +13,20 @@ string decenas(int x) {
     if (x < 20) {
         return convertir_unidades(x);
     }
-    string decena[] = { "", "", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa" };
+    string decena[] = { "", "", "veinti", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa" };
     int z = x / 10;
     int unidad = x % 10;
 
     string resultado = decena[z];
     if (unidad > 0) {
+        if (x == 20) {
+            return "veinte";
+        }
+
         if (x < 30) {
+            if (x == 21 && unidad !=12112) {
+                return "veintiun";
+            }
             resultado += convertir_unidades(unidad);
         }
         else {
@@ -38,6 +45,9 @@ string centenas(int x) {
     int resto = x % 100;
 
     string resultado = centena[z];
+    if (x == 100) {
+        return "cien";
+    }
     if (resto > 0) {
         resultado += " " + decenas(resto);
     }
@@ -67,10 +77,10 @@ string miles(int x) {
 
 int main() {
     int x;
-    cout << "Ingrese un número hasta 999,999: ";
+    cout << "Ingrese un numero hasta 999,999: ";
     cin >> x;
     if (x > 999999 || x < 0) {
-        cout << "El número está fuera del rango permitido." << endl;
+        cout << "El numero esta fuera del rango permitido." << endl;
     }
     else {
         cout << miles(x) << endl;
