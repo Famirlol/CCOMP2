@@ -1,0 +1,38 @@
+#include <iostream>
+using namespace std;
+
+void coctail(int* ini, int* fin) {
+    bool swapped = true;
+    while (ini < fin&& swapped) {
+        swapped = false;
+
+        for (int* p = ini; p < fin; p++) {
+            if (*p > *(p + 1)) {
+                swap(*p, *(p + 1));
+                swapped = true;
+            }
+        }
+        fin--;
+
+        for (int* p = fin; p > ini; p--) {
+            if (*p < *(p - 1)) {
+                swap(*p, *(p - 1));
+                swapped = true;
+            }
+        }
+        ini++;
+    }
+}
+
+int main() {
+    int x[] = { 2, 1, 4, 5, 7, 6 };
+    int* ini = x;
+    int* fin = x +5;
+
+    coctail(ini, fin);
+    for (int i = 0; i <6; i++) {
+        cout << x[i] << " ";
+    }
+
+    return 0;
+}
