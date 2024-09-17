@@ -1,0 +1,31 @@
+#include <iostream>
+using namespace std;
+void split(int* ini, int* fin) {
+	for (int* y = ini; y < fin; y++) {
+		if (*y % 2 != 0) {
+			for (int* r = fin; r > y; r--) {
+				if (*r % 2 == 0 && r > y) {
+					swap(*r, *y);
+				}
+			}
+		}
+	}
+
+	for (int* y =ini; y < fin; y++) {
+		for (int* y = ini; y < fin; y++) {
+			if (*y % 2 != 0 && *y > *(y + 1)) {
+				swap(*y, *(y + 1));
+			}
+		}
+	}
+}
+int main()
+{
+	int x[] = { 1,2,3,4,5,6,7,8 };
+	int* p = x;
+	int* d = x + 7;
+	split(p, d);
+	for (int y = 0; y <= 7; y++) {    
+		cout << x[y];
+	}
+}
