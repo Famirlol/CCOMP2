@@ -1,0 +1,77 @@
+#include <iostream>
+using namespace std;
+
+template <class T>
+struct nodo {
+    T valor;
+    nodo* siguiente;
+
+    nodo(T v) : valor(v), siguiente(nullptr) {}
+};
+
+template <class T>
+void merge(nodo<T>*& A, nodo<T>*& B) {
+    nodo<T>* p = nullptr; // Puntero para el inicio de la lista fusionada
+    nodo<T>* q = nullptr; // Puntero para el final de la lista fusionada
+
+    while (A != nullptr && B != nullptr) {
+        nodo<T>* temp;
+        if (A->valor <= B->valor) {
+            temp = A;
+            A = A->siguiente;
+        } else {
+            temp = B;
+            B = B->siguiente;
+        }
+
+        if (p == nullptr) {
+            p = temp;
+            q = temp;
+        } else {
+            q->siguiente = temp;
+            q = temp;
+        }
+    }
+
+    if (A != nullptr) {
+        q->siguiente = A;
+    } else {
+        q->siguiente = B;
+    }
+
+    A = p;
+}
+
+template <class T>
+void imprimirlista(nodo<T>* head) {
+    while (head != nullptr) {
+        cout << head->valor << " -> ";
+        head = head->siguiente;
+    }
+    cout << "nullptr" << endl;
+}
+
+int main() {
+    nodo<int>* lista1 = new nodo<int>(1);
+    lista1->siguiente = new nodo<int>(3);
+    lista1->siguiente->siguiente = new nodo<int>(5);
+    lista1->siguiente->siguiente->siguiente = new nodo<int>(8);
+
+    nodo<int>* lista2 = new nodo<int>(0);
+    lista2->siguiente = new nodo<int>(4);
+    lista2->siguiente->siguiente = new nodo<int>(6);
+    lista2->siguiente->siguiente->siguiente = new nodo<int>(8);
+    lista2->siguiente->siguiente->siguiente->siguiente = new nodo<int>(10);
+
+    cout << "Lista 1: ";
+    imprimirlista(lista1);
+    cout << "Lista 2: ";
+    imprimirlista(lista2);
+
+    merge(lista1, lista2);
+
+    cout << "Lista fusionada: ";
+    imprimirlista(lista1);
+
+    return 0;
+}
