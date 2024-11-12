@@ -1,0 +1,73 @@
+#include <iostream>
+using namespace std;
+
+template <class T>
+struct nodo {
+    T valor;
+    nodo* siguiente;
+
+    nodo(T v) : valor(v), siguiente(nullptr) {}
+};
+
+template <class T>
+struct ListaCircular {
+    nodo<T>* primero;
+
+    ListaCircular() : primero(nullptr) {}
+
+    void agregar(T valor) {
+        nodo<T>* nuevoNodo = new nodo<T>(valor);
+        if (primero == nullptr) {
+            primero = nuevoNodo;
+            nuevoNodo->siguiente = primero;
+            return;
+        }
+
+        nodo<T>* actual = primero;
+        nodo<T>* anterior = nullptr;
+        while (actual->siguiente != primero && actual->valor < valor) {
+            anterior = actual;
+            actual = actual->siguiente;
+        }
+        if (valor <= primero->valor) {
+            nodo<T>* ultimo = primero;
+            while (ultimo->siguiente != primero) {
+                ultimo = ultimo->siguiente;
+            }
+            ultimo->siguiente = nuevoNodo;
+            nuevoNodo->siguiente = primero;
+            primero = nuevoNodo;
+        }
+        else {
+            nuevoNodo->siguiente = actual;
+            anterior->siguiente = nuevoNodo;
+        }
+    }
+
+    void mostrar() {
+        if (primero == nullptr) {
+            cout << "La lista está vacía." << endl;
+            return;
+        }
+
+        nodo<T>* actual = primero;
+        while (actual->siguiente != primero) {
+            cout << actual->valor << " -> ";
+            actual = actual->siguiente;
+        }
+
+        cout << actual->valor << " ->inicio  ";
+        cout << actual->siguiente->valor;
+    }
+};
+
+int main() {
+    ListaCircular<int> listaEnteros;
+    listaEnteros.agregar(30);
+    listaEnteros.agregar(10);
+    listaEnteros.agregar(20);
+    listaEnteros.agregar(25);
+    listaEnteros.mostrar();
+
+    return 0;
+}
