@@ -1,0 +1,143 @@
+#include <iostream>
+using namespace std;
+
+template <class T>
+struct nodo {
+    T valor;
+    nodo* next;
+
+    nodo(T v) : valor(v), next(nullptr) {}
+};
+
+template <class T>
+struct ListaCircular {
+    nodo<T>* primero;
+
+    ListaCircular() : primero(nullptr) {}
+
+    void agregar(T valor) {
+        nodo<T>* nuevoNodo = new nodo<T>(valor);
+        if (primero == nullptr) {
+            primero = nuevoNodo;
+            nuevoNodo->next = primero;
+            return;
+        }
+
+        nodo<T>* actual = primero;
+        nodo<T>* anterior = nullptr;
+        while (actual->next != primero && actual->valor < valor) {
+            anterior = actual;
+            actual = actual->next;
+        }
+        if (valor < primero->valor) {
+            actual->next = nuevoNodo;
+            nuevoNodo->next = primero;
+            primero = nuevoNodo;
+        }else{
+        nuevoNodo->next = actual;
+        anterior->next = nuevoNodo;}
+
+    }
+
+    void mostrar() {
+        if (primero == nullptr) {
+            cout << "La lista está vacía." << endl;
+            return;
+        }
+
+        nodo<T>* actual = primero;
+        while (actual->next != primero) {
+            cout << actual->valor << " -> ";
+            actual = actual->next;
+        }
+
+        cout << actual->valor << " ->inicio  ";
+        cout << actual->next->valor << endl;
+        cout<<primero->valor;
+    }
+
+    bool find(T valor) {
+        if (primero == nullptr) {
+            return false;
+        }
+
+        nodo<T>* actual = primero;
+        while (true) {
+            if (actual->valor == valor) {
+                return true;
+            }
+            actual = actual->next;
+            if (actual == primero) {
+                return false;
+            }
+        }
+    }
+
+    void eliminar(T valor) {
+
+        nodo<T>* actual = primero;
+        nodo<T>* anterior = nullptr;
+
+        while (actual->next != primero) {
+            if (actual->valor == valor) {
+                if (actual == primero) {
+                    nodo<T>* ultimo = primero;
+                    while (ultimo->next != primero) {
+                        ultimo = ultimo->next;
+                    }
+                    if (primero == primero->next) {
+                        delete primero;
+                        primero = nullptr;
+                    }
+                    else {
+                        ultimo->next = primero->next;
+                        nodo<T>* temp = primero;
+                        primero = primero->next;
+                        delete temp;
+                    }
+                }
+                else {
+                    anterior->next = actual->next;
+                    delete actual;
+                }
+                cout << "Valor eliminado: " << valor << endl;
+                return;
+            }
+            anterior = actual;
+            actual = actual->next;
+
+        }
+    }
+};
+
+int main() {
+    ListaCircular<int> lista;
+
+
+    lista.agregar(30);
+    lista.agregar(10);
+    lista.agregar(20);
+    lista.agregar(25);
+
+    cout << "Lista inicial:" << endl;
+    lista.mostrar();
+
+    if (lista.find(20)) {
+        cout << "Se encontro el valor" << endl;
+    }
+    else {
+        cout << "No se encontro el valor" << endl;
+    }
+
+    lista.eliminar(50);
+    lista.mostrar();
+
+    lista.eliminar(10);
+    lista.mostrar();
+
+    lista.eliminar(30);
+    lista.mostrar();
+    lista.mostrar();
+
+    return 0;
+}
