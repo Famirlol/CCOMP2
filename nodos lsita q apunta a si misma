@@ -4,9 +4,9 @@ using namespace std;
 template <class T>
 struct nodo {
     T valor;
-    nodo* siguiente;
+    nodo* next;
 
-    nodo(T v) : valor(v), siguiente(nullptr) {}
+    nodo(T v) : valor(v), next(nullptr) {}
 };
 
 template <class T>
@@ -19,28 +19,28 @@ struct ListaCircular {
         nodo<T>* nuevoNodo = new nodo<T>(valor);
         if (primero == nullptr) {
             primero = nuevoNodo;
-            nuevoNodo->siguiente = primero;
+            nuevoNodo->next = primero;
             return;
         }
 
         nodo<T>* actual = primero;
         nodo<T>* anterior = nullptr;
-        while (actual->siguiente != primero && actual->valor < valor) {
+        while (actual->next != primero && actual->valor < valor) {
             anterior = actual;
-            actual = actual->siguiente;
+            actual = actual->next;
         }
         if (valor <= primero->valor) {
             nodo<T>* ultimo = primero;
-            while (ultimo->siguiente != primero) {
-                ultimo = ultimo->siguiente;
+            while (ultimo->next != primero) {
+                ultimo = ultimo->next;
             }
-            ultimo->siguiente = nuevoNodo;
-            nuevoNodo->siguiente = primero;
+            ultimo->next = nuevoNodo;
+            nuevoNodo->next = primero;
             primero = nuevoNodo;
         }
         else {
-            nuevoNodo->siguiente = actual;
-            anterior->siguiente = nuevoNodo;
+            nuevoNodo->next = actual;
+            anterior->next = nuevoNodo;
         }
     }
 
@@ -51,23 +51,105 @@ struct ListaCircular {
         }
 
         nodo<T>* actual = primero;
-        while (actual->siguiente != primero) {
+        while (actual->next != primero) {
             cout << actual->valor << " -> ";
-            actual = actual->siguiente;
+            actual = actual->next;
         }
 
         cout << actual->valor << " ->inicio  ";
-        cout << actual->siguiente->valor;
+        cout << actual->next->valor<<endl;
+    }
+
+    bool find(T valor) {
+        if (primero == nullptr) {
+            return false;
+        }
+
+        nodo<T>* actual = primero;
+        while (true) {
+            if (actual->valor == valor) {
+                return true;
+            }
+            actual = actual->next;
+            if (actual == primero) {
+                return false;
+            }
+        }
+    }
+
+    void eliminar(T valor) {
+        if (primero == nullptr) {
+            cout << "La lista está vacía" << endl;
+            return;
+        }
+
+        nodo<T>* actual = primero;
+        nodo<T>* anterior = nullptr;
+
+        while (true) {
+            if (actual->valor == valor) { 
+                if (actual == primero) { 
+                    nodo<T>* ultimo = primero;
+                    while (ultimo->next != primero) {
+                        ultimo = ultimo->next;
+                    }
+                    if (primero == primero->next) { 
+                        delete primero;
+                        primero = nullptr;
+                    } else {
+                        ultimo->next = primero->next;
+                        nodo<T>* temp = primero;
+                        primero = primero->next;
+                        delete temp;
+                    }
+                } else { 
+                    anterior->next = actual->next;
+                    delete actual;
+                }
+                cout << "Valor eliminado: " << valor << endl;
+                return;
+            }
+            anterior = actual;
+            actual = actual->next;
+
+            if (actual == primero) { 
+                cout << "Valor no encontrado: "<< endl;
+                return;
+            }
+        }
     }
 };
 
 int main() {
-    ListaCircular<int> listaEnteros;
-    listaEnteros.agregar(30);
-    listaEnteros.agregar(10);
-    listaEnteros.agregar(20);
-    listaEnteros.agregar(25);
-    listaEnteros.mostrar();
+    ListaCircular<int> lista;
+
+
+    lista.agregar(30);
+    lista.agregar(10);
+    lista.agregar(20);
+    lista.agregar(25);
+
+    cout << "Lista inicial:" << endl;
+    lista.mostrar();
+
+    if (lista.find(20)) {
+        cout << "Se encontrol el valor" << endl;
+    } else {
+        cout << "No se encontro el valor" << endl;
+    }
+
+    cout << endl << "Eliminando valores:" << endl;
+    lista.eliminar(20);
+    lista.mostrar();
+
+    lista.eliminar(10);
+    lista.mostrar();
+
+    lista.eliminar(50);
+    lista.mostrar();
+
+    lista.eliminar(30);
+    lista.mostrar();
 
     return 0;
 }
