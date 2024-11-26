@@ -1,0 +1,128 @@
+#include <iostream>
+using namespace std;
+
+template <class T>
+struct nodo {
+    T valor;
+    nodo* next;
+
+    nodo(T v) : valor(v), next(nullptr) {}
+};
+
+template <class T>
+struct ListaCircular {
+    nodo<T>* primero;
+
+    ListaCircular() : primero(nullptr) {}
+void agregar(T valor) {
+    nodo<T>* nuevoNodo = new nodo<T>(valor);
+    
+    if (primero == nullptr) { 
+        primero = nuevoNodo;
+        nuevoNodo->next = primero;
+        return;
+    }
+
+    nodo<T>* actual = primero;
+    while (actual->next != primero && actual->next->valor < valor) { 
+        actual = actual->next;
+    }
+
+    nuevoNodo->next = actual->next;
+    actual->next = nuevoNodo;
+
+    if (valor < primero->valor) { 
+        primero = nuevoNodo;
+    }
+}
+
+
+    void mostrar() {
+        if (primero == nullptr) {
+            cout << "La lista está vacía." << endl;
+            return;
+        }
+
+        nodo<T>* actual = primero;
+        while (actual->next != primero) {
+            cout << actual->valor << " -> ";
+            actual = actual->next;
+        }
+        cout << actual->valor << " -> inicio" << endl;
+    }
+
+    bool find(T valor) {
+        if (primero == nullptr) return false;
+
+        nodo<T>* actual = primero;
+
+        while (actual != primero || actual == primero) {
+            if (actual->valor == valor) return true;
+            actual = actual->next;
+        }
+
+        return false;
+    }
+
+void eliminar(T valor) {
+    if (primero == nullptr) {
+        return;
+    }
+
+    nodo<T>* actual = primero;
+    nodo<T>* anterior = nullptr;
+
+    while (actual->next != primero) {
+        if (actual->valor == valor) {
+            if (anterior != nullptr) { 
+                anterior->next = actual->next;
+            } else { 
+                nodo<T>* ultimo = primero;
+                while (ultimo->next != primero) {
+                    ultimo = ultimo->next;
+                }
+                primero = actual->next;
+                ultimo->next = primero;
+            }
+            delete actual;
+            return;
+        }
+        anterior = actual;
+        actual = actual->next;
+    }
+
+    if (actual->valor == valor) {
+        if (anterior != nullptr) {
+            anterior->next = actual->next; 
+        } else {
+            primero = nullptr;
+        }
+        delete actual;
+    }
+}
+
+
+};
+
+int main() {
+    ListaCircular<int> lista;
+
+    lista.agregar(30);
+    lista.agregar(10);
+    lista.agregar(20);
+    lista.agregar(25);
+
+    cout << "Lista inicial:" << endl;
+    lista.mostrar();
+
+    lista.eliminar(50);
+    lista.mostrar();
+
+    lista.eliminar(10);
+    lista.mostrar();
+
+    lista.eliminar(30);
+    lista.mostrar();
+
+    return 0;
+}
