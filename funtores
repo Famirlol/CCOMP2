@@ -1,0 +1,105 @@
+#include <iostream>
+using namespace std;
+
+struct Asc {};
+struct Desc {};
+
+template <typename T>
+class Pivot {
+    T x; 
+public:
+    Pivot(T a) : x(a) {}
+
+    void Asc(T lista[], int tam) {
+        int izquierda = 0;
+        int derecha = tam - 1;
+        int y = 0;
+        int d = 0;
+
+
+        while (izquierda <= derecha) {
+            if (lista[izquierda] < x) {
+                izquierda++;
+            }
+            else if (lista[derecha] >= x) {
+                derecha--;
+            }
+            else {
+                swap(lista[izquierda], lista[derecha]);
+                izquierda++;
+                derecha--;
+            }
+            }
+        while (lista[d] != x) {
+            d += 1;
+        }
+        for (int i = 0;d!=tam && i < tam && y == 0; i++) {
+            if (lista[i] > x && lista[d]>lista[d+1]) {
+                swap(lista[i], lista[d]);
+                y += 1;
+            }
+        }
+
+    }
+
+    void Des(T lista[], int tam) {
+        int y = 0;
+        int izquierda = 0;
+        int derecha = tam - 1;
+        int d = 0;
+
+        while (izquierda <= derecha) {
+            if (lista[izquierda] > x) {
+                izquierda++;
+            }
+            else if (lista[derecha] <= x) {
+                derecha--;
+            }
+            else {
+                swap(lista[izquierda], lista[derecha]);
+                izquierda++;
+                derecha--;
+            }
+        }
+        while (lista[d] != x) {
+            d += 1;
+        }
+        for (int i = 0; i < tam && y == 0; i++) {
+            if (lista[i] < x) {
+                swap(lista[i], lista[d]);
+                y += 1;
+            }
+        }
+    }
+};
+
+int main() {
+    const int tam = 7;
+    int listaAsc[tam] = { 10, 5, 7, 20, 15, 3, 8 };
+    int listaDesc[tam] = { 10, 5, 7, 20, 15, 3, 8 };
+    int pivote = 20;
+
+    Pivot<int> l(pivote);
+
+    cout << "Lista original: ";
+    for (int i = 0; i < tam; i++) {
+        cout << listaAsc[i] << " ";
+    }
+    cout << endl;
+
+    l.Asc(listaAsc, tam);
+    cout << "Lista ordenada ascendente con pivote: "<<pivote<<endl;
+    for (int i = 0; i < tam; i++) {
+        cout << listaAsc[i] << " ";
+    }
+    cout << endl;
+
+    l.Des(listaDesc, tam);
+    cout << "Lista ordenada descendente con pivote: "<<pivote<<endl;
+    for (int i = 0; i < tam; i++) {
+        cout << listaDesc[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
