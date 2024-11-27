@@ -48,7 +48,7 @@ void agregar(T valor) {
             cout << actual->valor << " -> ";
             actual = actual->next;
         }
-        cout << actual->valor << " -> inicio" << endl;
+        cout << actual->valor << " -> inicio " <<actual->next->valor<< endl;
     }
 
     bool find(T valor) {
